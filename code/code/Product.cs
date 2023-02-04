@@ -115,27 +115,39 @@ namespace code
             };
         }
 
-        protected override string[] GetFields()
+        // el metodo regresa un conjunto de campos por default si no tiene parametros, en caso
+        // contrario se regresan los campos especificados en los parametros
+        protected override string[] GetFields(params object[] fields)
         {
-            return new string[] 
+            if (fields.Length == 0)
             {
-            "Descripciones",
-            "Costo",
-            "PrecioVenta",
-            "Stock",
-            };
+                return new string[]
+                {
+                "Descripciones",
+                "Costo",
+                "PrecioVenta",
+                "Stock",
+                };
+            }
+
+            else
+                return (string[])fields;
+            
         }
 
+        // regresa la tabla equivalente a Sql
         protected override string GetTable()
         {
             return "Prodcuto";
         }
 
-        protected override Product GetType()
-        {
-            return new Product();
-        }
+        //protected override Product GetType()
+        //{
+        //    return this;
+        //}
 
+        // se cambian los valores de las variables de instancia por un conjunto de valores
+        // dados por un argumento variable de parametros
         protected override void SetValues(params object[] values)
         {
             this._id = (long)values[0];

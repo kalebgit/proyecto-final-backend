@@ -1,0 +1,5 @@
+C:\Users\emili\programacion\C#\coder\entrega-final\proyecto-final-backend\code\code\obj\Debug\net6.0\code.csproj.AssemblyReference.cache
+C:\Users\emili\programacion\C#\coder\entrega-final\proyecto-final-backend\code\code\obj\Debug\net6.0\code.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\emili\programacion\C#\coder\entrega-final\proyecto-final-backend\code\code\obj\Debug\net6.0\code.AssemblyInfoInputs.cache
+C:\Users\emili\programacion\C#\coder\entrega-final\proyecto-final-backend\code\code\obj\Debug\net6.0\code.AssemblyInfo.cs
+C:\Users\emili\programacion\C#\coder\entrega-final\proyecto-final-backend\code\code\obj\Debug\net6.0\code.csproj.CoreCompileInputs.cache

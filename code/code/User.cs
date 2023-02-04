@@ -128,16 +128,23 @@ namespace code
             };
         }
 
-        protected override string[] GetFields()
+        protected override string[] GetFields(params object[] fields)
         {
-            return new string[]
+            if(fields.Length == 0)
             {
-            "Nombre",
-            "Apellido",
-            "NombreUsuario",
-            "Contraseña",
-            "Mail"
-            };
+                return new string[]
+                {
+                "Nombre",
+                "Apellido",
+                "NombreUsuario",
+                "Contraseña",
+                "Mail"
+                };
+            }
+
+            else
+                return (string[])fields;
+
         }
 
         protected override string GetTable()
@@ -145,10 +152,10 @@ namespace code
             return "Usuario";
         }
 
-        protected override User GetType()
-        {
-            return new User();
-        }
+        //protected override User GetType()
+        //{
+        //    return this;
+        //}
         protected override void SetValues(params object[] values)
         {
             this._id = (long)values[0];
@@ -158,5 +165,22 @@ namespace code
             this._password = values[4].ToString();
             this._mail = values[5].ToString();
         }
+
+        // metodo para iniciar sesion
+        public void SignIn()
+        {
+            string userName;
+            string password;
+            Console.WriteLine("\n\n========= INICIO DE SESION ============\n\n");
+            Console.Write("Ingresa tu usuario: ");
+            userName = Console.ReadLine();
+            Console.Write("Ingresa tu contrasenia: ");
+            //do
+            //{
+            //    Console.Read
+            //}while()
+        }
+
+        
     }
 }
