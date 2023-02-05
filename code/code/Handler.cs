@@ -24,6 +24,7 @@ namespace code
             ArrayList objects = new ArrayList();
             using(SqlConnection connection = new SqlConnection(_connectionString))
             {
+                connection.Open();
                 SqlCommand comando = new SqlCommand($"SELECT * FROM {GetTable()}", connection);
                 using (SqlDataReader dataReader = comando.ExecuteReader())
                 {
@@ -61,6 +62,7 @@ namespace code
                         }
                     }
                 }
+                connection.Close();
             }
 
             return objects;
@@ -93,10 +95,12 @@ namespace code
                     
                 }
 
-                SqlCommand comando = new SqlCommand($"UPDATE {GetTable()} SET" + updatedValues, 
+                SqlCommand comando = new SqlCommand($"UPDATE {GetTable()} SET" + updatedValues +
+                    $" WHERE Id = {GetType().Id}", 
                     connection);
 
                 comando.ExecuteNonQuery();
+                connection.Close();
             }
             
         }
@@ -107,6 +111,7 @@ namespace code
             string insertedValues = "";
             using(SqlConnection connection = new SqlConnection(_connectionString))
             {
+                connection.Open();
 
                 for(int i = 0; i < objects.Count; i++)
                 {
@@ -123,6 +128,7 @@ namespace code
                     $" VALUES {insertedValues}", connection);
 
                 comando.ExecuteNonQuery();
+                connection.Close();
             }
         }
 
@@ -143,7 +149,8 @@ namespace code
             }
             using(SqlConnection connection = new SqlConnection(_connectionString))
             {
-                
+                connection.Open();
+
                 switch (option)
                 {
                     case 1:
@@ -253,15 +260,48 @@ namespace code
 
                         return objectsRetrieved;
                         break;
-                    case 4:
 
+                    case 4:
+                        Console.Write("\nIngresa el usuario que deseas recuperar" +
+                            " para imprimir las ventas que ha generado");
+                        while (!(int.TryParse(Console.ReadLine(), out id)))
+                        {
+                            Console.WriteLine("\n==== valor no valido vuelve a intentar =====\n");
+                        }
                         //temporal mientras se arregla la base de datos
+
+                        using(SqlConnection connectino = new SqlConnection(_connectionString))
+                        {
+                            SqlCommand command4 = new SqlCommand("SELECT vent.Id, vent.Comentarios, " +
+                                "FROM Venta vent " +
+                                "INNER JOIN " +
+                                "Usuario usr " +
+                                $"ON vent.IdUsuario = {id};", connection);
+
+                            using(SqlDataReader dataReader = command4.ExecuteReader())
+                            {
+                                if (dataReader.HasRows)
+                                {
+                                    Console.WriteLine("LAS VENTAS ASOCIADAS AL USUARIO " +
+                                        id);
+                                    while (dataReader.Read())
+                                    {
+                                        Console.WriteLine("\n\n ============ VENTA ==========" +
+                                            $"\nId de venta: {dataReader.GetInt64(0)}" +
+                                            $"\nComentarios: {dataReader.GetString(1)}" +
+                                            $"\n");
+                                    }
+                                }
+                            }
+                        }
                         return null;
                         break;
                     default:
                         return null;
                         break;
                 }
+
+                connection.Close();
             }
             
 
@@ -269,7 +309,7 @@ namespace code
 
 
         protected abstract void SetValues(params object[] values);
-        //protected abstract object GetType();
+        protected abstract object GetType();
         protected abstract ArrayList GetValues();
         protected abstract string[] GetFields(params object[] fields);
         protected abstract string GetTable();

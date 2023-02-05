@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace code
 {
@@ -102,6 +103,18 @@ namespace code
             }
         }
 
+        // to string
+        public override string ToString()
+        {
+            return String.Format($"\n\n %%%%%%%%%%%% producto %%%%%%%%%%%%\n\n" +
+            $"Informacion" +
+                $"\nid producto: {Id}" +
+                $"\ndescripcion: {Description}" +
+                $"\ncosto: {Cost}" +
+                $"\nPrecio de venta: {SellingPrice}" +
+                $"\nstock: {Stock}" +
+                $"\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        }
 
         // inherited method
         protected override ArrayList GetValues()
@@ -138,13 +151,13 @@ namespace code
         // regresa la tabla equivalente a Sql
         protected override string GetTable()
         {
-            return "Prodcuto";
+            return "Producto";
         }
 
-        //protected override Product GetType()
-        //{
-        //    return this;
-        //}
+        protected override Product GetType()
+        {
+            return this;
+        }
 
         // se cambian los valores de las variables de instancia por un conjunto de valores
         // dados por un argumento variable de parametros

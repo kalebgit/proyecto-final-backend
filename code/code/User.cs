@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -114,6 +115,16 @@ namespace code
             }
         }
 
+        // to string
+        public override string ToString()
+        {
+            return String.Format($"\n\n %%%%%%%%%%%% usuario %%%%%%%%%%%%\n\n" +
+                $"Informacion" +
+                $"\nnombre: {Name} {LastName}" +
+                $"\nusuario: {UserName}" +
+                $"\ncorreo: {Mail}" +
+                $"\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        }
 
         // inherited method
         protected override ArrayList GetValues()
@@ -152,10 +163,10 @@ namespace code
             return "Usuario";
         }
 
-        //protected override User GetType()
-        //{
-        //    return this;
-        //}
+        protected override User GetType()
+        {
+            return this;
+        }
         protected override void SetValues(params object[] values)
         {
             this._id = (long)values[0];
@@ -170,15 +181,36 @@ namespace code
         public void SignIn()
         {
             string userName;
-            string password;
+            string password = "";
             Console.WriteLine("\n\n========= INICIO DE SESION ============\n\n");
             Console.Write("Ingresa tu usuario: ");
             userName = Console.ReadLine();
-            Console.Write("Ingresa tu contrasenia: ");
-            //do
-            //{
-            //    Console.Read
-            //}while()
+            do
+            {
+                Console.Write("Ingresa tu contrasenia: ");
+                Console.ReadLine();
+
+            } while (string.IsNullOrWhiteSpace(password));
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand("SELECT * FROM Usuario " +
+                    $"WHERE NombreUsuario = '{userName}' " +
+                    $"AND Contraseña = '{password}'", connection);
+
+                using(SqlDataReader dataReader = command.ExecuteReader())
+                {
+                    if(dataReader.HasRows && dataReader.Read())
+                    {
+                        Console.WriteLine($"\n\n===== Bienvendio {userName} usted ha inciado" +
+                            $"sesion ======\n\n");
+                    }
+                }
+
+                connection.Close();
+            }
         }
 
         
